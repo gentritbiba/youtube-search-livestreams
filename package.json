@@ -1,0 +1,26 @@
+{
+  "name": "youtube-search-livestreams",
+  "version": "1.0.0",
+  "description": "Scrape information about youtube videos using a search query",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gentritbiba/youtube-search-livestreams.git"
+  },
+  "keywords": [
+    "youtube",
+    "scrape",
+    "live",
+    "webscrape",
+    "search"
+  ],
+  "author": "Gentrit Biba <gentritbiba@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gentritbiba/youtube-scrape-search/issues"
+  },
+  "homepage": "https://github.com/gentritbiba/youtube-scrape-search#readme"
+}
