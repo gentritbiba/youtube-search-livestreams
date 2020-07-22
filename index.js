@@ -119,7 +119,7 @@ YoutubeVideo.prototype.getIframe = function (
   height = 315,
   allowFullscreen = true
 ) {
-  return `<iframe width="${width}" height="${height}" src="https://www.youtube.com/embed/${
+  return `<iframe width="${width}" height="${height}" src="${baseURL}/embed/${
     this.id
   }" frameborder="0" ${allowFullscreen ? "allowFullscreen" : ""}></iframe>`;
 };
