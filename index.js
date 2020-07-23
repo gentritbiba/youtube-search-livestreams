@@ -26,7 +26,7 @@ function scrapeYoutube(s = "live music stream", onlyLive = true) {
       if (error) throw new Error(error);
       const $ = cheerio.load(response.body);
       const scripts = $("script").get();
-      const text = scripts[scripts.length - 3].children[0].data;
+      const text = $.get().data;
       var findAndClean = findTextBetween(
         text,
         'window["ytInitialData"] = ',
