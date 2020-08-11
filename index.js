@@ -8,14 +8,14 @@ function num(s) {
 
 function findTextBetween(target, start, end, rareOffset = 0) {
   var chopFront = target.substring(
-    target.search(start) + start.length + rareOffset,
+    target.indexOf(start) + start.length + rareOffset,
     target.length
   ); //Honestly I have no idea why rareoffset + 6 works on fetching the json data, but it does 🤷‍♂️
-  var result = chopFront.substring(0, chopFront.search(end));
+  var result = chopFront.substring(0, chopFront.indexOf(end));
   return result;
 }
 
-function scrapeYoutube(s = "live music stream", onlyLive = true) {
+function scrapeYoutube(s = "live music stream", onlyLive = false) {
   const options = {
     method: "GET",
     url: `${baseURL}/results?search_query=${escape(s.replace(" ", "+"))}`,
@@ -26,13 +26,15 @@ function scrapeYoutube(s = "live music stream", onlyLive = true) {
       if (error) throw new Error(error);
       const $ = cheerio.load(response.body);
       const scripts = $("script").get();
-      const text = $.get().data;
+      const text = response.body;
+      
       var findAndClean = findTextBetween(
         text,
         'window["ytInitialData"] = ',
         ";",
-        6
+        0
       );
+      // console.log(findAndClean.substring(0,50),findAndClean.substring(findAndClean.length-50,findAndClean.length))
       var result = JSON.parse(findAndClean);
       const videos =
         result.contents.twoColumnSearchResultsRenderer.primaryContents
@@ -41,12 +43,10 @@ function scrapeYoutube(s = "live music stream", onlyLive = true) {
       videos.forEach((video) => {
         try {
           if (
-            onlyLive &&
-            !video.videoRenderer.badges &&
-            video.videoRenderer.badges[0].label != "LIVE NOW"
-          )
-            return;
-
+            !onlyLive || (
+              (video.videoRenderer && video.videoRenderer.badges &&
+              video.videoRenderer.badges[0].metadataBadgeRenderer.label == "LIVE NOW"))
+          ){
           const channelName = video.videoRenderer.ownerText.runs[0].text;
           const channelId =
             video.videoRenderer.ownerText.runs[0].navigationEndpoint
@@ -88,8 +88,8 @@ function scrapeYoutube(s = "live music stream", onlyLive = true) {
             videoStartedStreaming,
             videoThumbnails
           );
-          videosOut.push(tempVid);
-        } catch (err) {}
+          videosOut.push(tempVid);}
+        } catch (err) {console.log(err)}
       });
       resolve(videosOut);
     });
